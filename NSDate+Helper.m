@@ -81,8 +81,10 @@
 		[displayFormatter setDateFormat:@"h:mm a"]; // 11:30 am
 	} else {
 		// check if date is within last 7 days
-		[offsetComponents setDay:-7];
-		NSDate *lastweek = [calendar dateByAddingComponents:offsetComponents toDate:today options:0];
+		NSDateComponents *componentsToSubtract = [[NSDateComponents alloc] init];
+		[componentsToSubtract setDay:-7];
+		NSDate *lastweek = [calendar dateByAddingComponents:componentsToSubtract toDate:today options:0];
+		[componentsToSubtract release];
 		if ([date compare:lastweek] == NSOrderedDescending) {
 			[displayFormatter setDateFormat:@"EEEE"]; // Tuesday
 		} else {
