@@ -10,8 +10,10 @@
 
 @interface NSDate (Helper)
 
-- (NSInteger)daysAgo;
+- (NSUInteger)daysAgo;
+- (NSUInteger)daysAgoAgainstMidnight;
 - (NSString *)stringDaysAgo;
+- (NSString *)stringDaysAgoAgainstMidnight:(BOOL)flag;
 
 + (NSString *)dbFormatString;
 + (NSDate *)dateFromString:(NSString *)string;
