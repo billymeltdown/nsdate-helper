@@ -39,10 +39,12 @@ h4. Installation
 
 To use it in your Cocoa project, import the header and implementation files, and then add the header to your project's <projectname>_prefix.pch file so that it's available across your project:
   
+<pre><code>
   #ifdef __OBJC__
       #import <Foundation/Foundation.h>
       #import <UIKit/UIKit.h>
   	  #import "NSDate+Helper.h"
   #endif
+</code></pre>
 
 
