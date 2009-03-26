@@ -24,7 +24,7 @@ Another set of methods provide days-ago information:
 <pre><code>
   NSDate *date = [NSDate date];
   [date daysAgo]; // provides an NSComponent-based NSUInteger describing days ago.
-  [date daysAgoAgainstMidnight]; // better version of daysAgo, works off midnight.
+  [date daysAgoAgainstMidnight]; // better version of daysAgo, works off midnight (hat-tip: "sburlot":http://github.com/sburlot)
   [date stringDaysAgo]; // 'Today', 'Yesterday', or 'N days ago'.
 </code></pre>
   
