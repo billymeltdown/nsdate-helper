@@ -93,6 +93,7 @@
 	NSDate *midnight = [calendar dateFromComponents:offsetComponents];
 	
 	NSDateFormatter *displayFormatter = [[NSDateFormatter alloc] init];
+	NSString *displayString = nil;
 	
 	// comparing against midnight
 	if ([date compare:midnight] == NSOrderedDescending) {
@@ -121,7 +122,9 @@
 	}
 	
 	// use display formatter to return formatted date string
-	return [displayFormatter stringFromDate:date];
+	displayString = [displayFormatter stringFromDate:date];
+	[displayFormatter release];
+	return displayString;
 }
 
 @end
