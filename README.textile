@@ -10,7 +10,9 @@ h3. Usage
 
 Two convenience methods make it easy for you to display some relative date information. @stringForDisplayFromDate@ gives you the kind of relative you see in the Notes listing on the iPhone:
 
+<pre><code>
   NSString *displayString = [NSDate stringForDisplayFromDate:date];
+</code></pre>
   
 This produces the following kinds of output:
   
@@ -18,8 +20,10 @@ This produces the following kinds of output:
 * 'Tuesday' - if the date is within the last seven days
 * 'Mar 1' - if the date is within the current calendar year
 * 'Mar 1, 2008' - else ;-)
-
+  
+<pre><code>
   NSString *displayString = [NSDate stringForDisplayFromData:date prefixed:YES];
+</code></pre>
   
 This produces the same as above, but prefixed with 'at' or 'on' depending on the appropriate English syntax.
 
