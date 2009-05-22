@@ -8,7 +8,7 @@ Anyone is welcome to fork and send pull requests, it's always appreciated.
 
 h3. Usage
 
-Two convenience methods make it easy for you to display some relative date information. @stringForDisplayFromDate@ gives you the kind of relative you see in the Notes listing on the iPhone:
+Two convenience methods make it easy for you to display some relative date information. @stringForDisplayFromDate@ gives you the kind of relative format you see in the Notes listing on the iPhone:
 
 <pre><code>
   NSString *displayString = [NSDate stringForDisplayFromDate:date];
