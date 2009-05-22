@@ -19,7 +19,7 @@ This produces the following kinds of output:
 * 'Mar 1' - if the date is within the current calendar year
 * 'Mar 1, 2008' - else ;-)
 
-  NSString *displayString = [NSDate stringForDisaplyFromData:date prefixed:YES];
+  NSString *displayString = [NSDate stringForDisplayFromData:date prefixed:YES];
   
 This produces the same as above, but prefixed with 'at' or 'on' depending on the appropriate English syntax.
 
