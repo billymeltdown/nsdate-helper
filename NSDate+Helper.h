@@ -14,6 +14,7 @@
 - (NSUInteger)daysAgoAgainstMidnight;
 - (NSString *)stringDaysAgo;
 - (NSString *)stringDaysAgoAgainstMidnight:(BOOL)flag;
+- (NSUInteger)weekday;
 
 + (NSString *)dbFormatString;
 + (NSDate *)dateFromString:(NSString *)string;

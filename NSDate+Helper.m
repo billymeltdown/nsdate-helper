@@ -53,6 +53,12 @@
 	return text;
 }
 
+- (NSUInteger)weekday {
+	NSCalendar *calendar = [NSCalendar currentCalendar];
+	NSDateComponents *weekdayComponents = [calendar components:(NSWeekdayCalendarUnit) fromDate:self];
+	return [weekdayComponents weekday];
+}
+
 + (NSString *)dbFormatString {
 	return @"yyyy-MM-dd HH:mm:ss";
 }
@@ -97,11 +103,11 @@
 	
 	// comparing against midnight
 	if ([date compare:midnight] == NSOrderedDescending) {
-    if (prefixed) {
-      [displayFormatter setDateFormat:@"'at' h:mm a"]; // at 11:30 am
-    } else {
-      [displayFormatter setDateFormat:@"h:mm a"]; // 11:30 am
-    }
+		if (prefixed) {
+			[displayFormatter setDateFormat:@"'at' h:mm a"]; // at 11:30 am
+		} else {
+			[displayFormatter setDateFormat:@"h:mm a"]; // 11:30 am
+		}
 	} else {
 		// check if date is within last 7 days
 		NSDateComponents *componentsToSubtract = [[NSDateComponents alloc] init];
@@ -123,11 +129,11 @@
 				[displayFormatter setDateFormat:@"MMM d, YYYY"];
 			}
 		}
-    if (prefixed) {
-      NSString *dateFormat = [displayFormatter dateFormat];
-      NSString *prefix = @"'on' ";
-      [displayFormatter setDateFormat:[prefix stringByAppendingString:dateFormat]];
-    }
+		if (prefixed) {
+			NSString *dateFormat = [displayFormatter dateFormat];
+			NSString *prefix = @"'on' ";
+			[displayFormatter setDateFormat:[prefix stringByAppendingString:dateFormat]];
+		}
 	}
 	
 	// use display formatter to return formatted date string
@@ -137,7 +143,7 @@
 }
 
 + (NSString *)stringForDisplayFromDate:(NSDate *)date {
-  return [self stringForDisplayFromDate:date prefixed:NO];
+	return [self stringForDisplayFromDate:date prefixed:NO];
 }
 
 @end
