@@ -4,9 +4,11 @@ This is a category for the @NSDate@ class that provides some convenience methods
 
 More information can be found at my "initial blog post":http://www.zetetic.net/blog/2009/03/11/nsdate-helper/.
 
-Anyone is welcome to fork and send pull requests, it's always appreciated.
+Anyone is welcome to use it for anything, and to change it as they see fit. If you'd like to contribute back any changes (woot!), please fork and send a pull request!
 
 h3. Usage
+
+Full documentation is now up "on the Github wiki for this project":http://wiki.github.com/billymeltdown/nsdate-helper.
 
 Two convenience methods make it easy for you to display some relative date information. @stringForDisplayFromDate@ gives you the kind of relative format you see in the Notes listing on the iPhone:
 
