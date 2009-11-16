@@ -23,4 +23,7 @@
 + (NSString *)stringForDisplayFromDate:(NSDate *)date;
 + (NSString *)stringForDisplayFromDate:(NSDate *)date prefixed:(BOOL)prefixed;
 
+- (NSDate *)beginningOfWeek;
+- (NSDate *)beginningOfDay;
+
 @end
