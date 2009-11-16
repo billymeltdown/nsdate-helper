@@ -8,7 +8,7 @@ Anyone is welcome to use it for anything, and to change it as they see fit. If y
 
 h3. Usage
 
-Full documentation is now up "on the Github wiki for this project":http://wiki.github.com/billymeltdown/nsdate-helper.
+Full documentation is now up "on the Github wiki for this project":http://wiki.github.com/billymeltdown/nsdate-helper. It's a lot better than this kinda rambling overview here.
 
 Two convenience methods make it easy for you to display some relative date information. @stringForDisplayFromDate@ gives you the kind of relative format you see in the Notes listing on the iPhone:
 
