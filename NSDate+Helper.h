@@ -25,5 +25,6 @@
 
 - (NSDate *)beginningOfWeek;
 - (NSDate *)beginningOfDay;
+- (NSDate *)endOfWeek;
 
 @end

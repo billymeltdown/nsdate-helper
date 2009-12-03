@@ -151,6 +151,14 @@
 	// we'll use the default calendar and hope for the best
 	
 	NSCalendar *calendar = [NSCalendar currentCalendar];
+	NSDate *beginningOfWeek = nil;
+	BOOL ok = [calendar rangeOfUnit:NSWeekCalendarUnit startDate:&beginningOfWeek
+						   interval:NULL forDate:self];
+	if (ok) {
+		return beginningOfWeek;
+	} 
+		
+	// couldn't calc via range, so try to grab Sunday, assuming gregorian style
 	// Get the weekday component of the current date
 	NSDateComponents *weekdayComponents = [calendar components:NSWeekdayCalendarUnit fromDate:self];
 	
@@ -160,7 +168,8 @@
 	 */
 	NSDateComponents *componentsToSubtract = [[NSDateComponents alloc] init];
 	[componentsToSubtract setDay: 0 - ([weekdayComponents weekday] - 1)];
-	NSDate *beginningOfWeek = [calendar dateByAddingComponents:componentsToSubtract toDate:self options:0];
+	beginningOfWeek = nil;
+	beginningOfWeek = [calendar dateByAddingComponents:componentsToSubtract toDate:self options:0];
 	[componentsToSubtract release];
 	
 	//normalize to midnight, extract the year, month, and day components and create a new date from those components.
@@ -175,6 +184,19 @@
 	NSDateComponents *components = [calendar components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit) 
 											   fromDate:self];
 	return [calendar dateFromComponents:components];
+}
+
+- (NSDate *)endOfWeek {
+	NSCalendar *calendar = [NSCalendar currentCalendar];
+	// Get the weekday component of the current date
+	NSDateComponents *weekdayComponents = [calendar components:NSWeekdayCalendarUnit fromDate:self];
+	NSDateComponents *componentsToAdd = [[NSDateComponents alloc] init];
+	// to get the end of week for a particular date, add (7 - weekday) days
+	[componentsToAdd setDay:(7 - [weekdayComponents weekday])];
+	NSDate *endOfWeek = [calendar dateByAddingComponents:componentsToAdd toDate:self options:0];
+	[componentsToAdd release];
+	
+	return endOfWeek;
 }
 
 @end
