@@ -59,28 +59,24 @@
 	return [weekdayComponents weekday];
 }
 
-+ (NSString *)dbFormatString {
-	return @"yyyy-MM-dd HH:mm:ss";
++ (NSDate *)dateFromString:(NSString *)string {
+	return [NSDate dateFromString:string withFormat:[NSDate dbFormatString]];
 }
 
-+ (NSDate *)dateFromString:(NSString *)string {
++ (NSDate *)dateFromString:(NSString *)string withFormat:(NSString *)format {
 	NSDateFormatter *inputFormatter = [[NSDateFormatter alloc] init];
-	[inputFormatter setDateFormat:[NSDate dbFormatString]];
+	[inputFormatter setDateFormat:format];
 	NSDate *date = [inputFormatter dateFromString:string];
 	[inputFormatter release];
 	return date;
 }
 
 + (NSString *)stringFromDate:(NSDate *)date withFormat:(NSString *)format {
-	NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
-	[outputFormatter setDateFormat:format];
-	NSString *timestamp_str = [outputFormatter stringFromDate:date];
-	[outputFormatter release];
-	return timestamp_str;
+	return [date stringWithFormat:format];
 }
 
 + (NSString *)stringFromDate:(NSDate *)date {
-	return [NSDate stringFromDate:date withFormat:[NSDate dbFormatString]];
+	return [date string];
 }
 
 + (NSString *)stringForDisplayFromDate:(NSDate *)date prefixed:(BOOL)prefixed {
@@ -126,7 +122,7 @@
 			if (thatYear >= thisYear) {
 				[displayFormatter setDateFormat:@"MMM d"];
 			} else {
-				[displayFormatter setDateFormat:@"MMM d, YYYY"];
+				[displayFormatter setDateFormat:@"MMM d, yyyy"];
 			}
 		}
 		if (prefixed) {
@@ -146,6 +142,27 @@
 	return [self stringForDisplayFromDate:date prefixed:NO];
 }
 
+- (NSString *)stringWithFormat:(NSString *)format {
+	NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
+	[outputFormatter setDateFormat:format];
+	NSString *timestamp_str = [outputFormatter stringFromDate:self];
+	[outputFormatter release];
+	return timestamp_str;
+}
+
+- (NSString *)string {
+	return [self stringWithFormat:[NSDate dbFormatString]];
+}
+
+- (NSString *)stringWithDateStyle:(NSDateFormatterStyle)dateStyle timeStyle:(NSDateFormatterStyle)timeStyle {
+	NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
+	[outputFormatter setDateStyle:dateStyle];
+	[outputFormatter setTimeStyle:timeStyle];
+	NSString *outputString = [outputFormatter stringFromDate:self];
+	[outputFormatter release];
+	return outputString;
+}
+
 - (NSDate *)beginningOfWeek {
 	// largely borrowed from "Date and Time Programming Guide for Cocoa"
 	// we'll use the default calendar and hope for the best
@@ -157,7 +174,7 @@
 	if (ok) {
 		return beginningOfWeek;
 	} 
-		
+	
 	// couldn't calc via range, so try to grab Sunday, assuming gregorian style
 	// Get the weekday component of the current date
 	NSDateComponents *weekdayComponents = [calendar components:NSWeekdayCalendarUnit fromDate:self];
@@ -197,6 +214,23 @@
 	[componentsToAdd release];
 	
 	return endOfWeek;
+}
+
++ (NSString *)dateFormatString {
+	return @"yyyy-MM-dd";
+}
+
++ (NSString *)timeFormatString {
+	return @"HH:mm:ss";
+}
+
++ (NSString *)timestampFormatString {
+	return @"yyyy-MM-dd HH:mm:ss";
+}
+
+// preserving for compatibility
++ (NSString *)dbFormatString {	
+	return [NSDate timestampFormatString];
 }
 
 @end
