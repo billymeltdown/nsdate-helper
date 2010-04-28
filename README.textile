@@ -24,7 +24,7 @@ This produces the following kinds of output:
 * 'Mar 1, 2008' - else ;-)
   
 <pre><code>
-  NSString *displayString = [NSDate stringForDisplayFromData:date prefixed:YES];
+  NSString *displayString = [NSDate stringForDisplayFromDate:date prefixed:YES];
 </code></pre>
   
 This produces the same as above, but prefixed with 'at' or 'on' depending on the appropriate English syntax.
