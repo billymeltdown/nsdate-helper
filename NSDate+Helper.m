@@ -30,15 +30,26 @@
 
 #import "NSDate+Helper.h"
 
+static NSCalendar *calendar;
+static NSDateFormatter *displayFormatter;
+
 @implementation NSDate (Helper)
+
++ (void)load {
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    
+    calendar = [[NSCalendar currentCalendar] retain];
+    displayFormatter = [[NSDateFormatter alloc] init];
+    
+	[pool drain];
+}
 
 /*
  * This guy can be a little unreliable and produce unexpected results,
  * you're better off using daysAgoAgainstMidnight
  */
 - (NSUInteger)daysAgo {
-	NSCalendar *calendar = [NSCalendar currentCalendar];
-	NSDateComponents *components = [calendar components:(NSDayCalendarUnit) 
+    NSDateComponents *components = [calendar components:(NSDayCalendarUnit) 
 											   fromDate:self
 												 toDate:[NSDate date]
 												options:0];
@@ -76,8 +87,7 @@
 }
 
 - (NSUInteger)weekday {
-	NSCalendar *calendar = [NSCalendar currentCalendar];
-	NSDateComponents *weekdayComponents = [calendar components:(NSWeekdayCalendarUnit) fromDate:self];
+    NSDateComponents *weekdayComponents = [calendar components:(NSWeekdayCalendarUnit) fromDate:self];
 	return [weekdayComponents weekday];
 }
 
@@ -110,13 +120,11 @@
 	 */
 	
 	NSDate *today = [NSDate date];
-	NSCalendar *calendar = [NSCalendar currentCalendar];
-	NSDateComponents *offsetComponents = [calendar components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit) 
+    NSDateComponents *offsetComponents = [calendar components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit) 
 													 fromDate:today];
 	
 	NSDate *midnight = [calendar dateFromComponents:offsetComponents];
 	
-	NSDateFormatter *displayFormatter = [[NSDateFormatter alloc] init];
 	NSString *displayString = nil;
 	
 	// comparing against midnight
@@ -156,7 +164,6 @@
 	
 	// use display formatter to return formatted date string
 	displayString = [displayFormatter stringFromDate:date];
-	[displayFormatter release];
 	return displayString;
 }
 
@@ -189,8 +196,7 @@
 	// largely borrowed from "Date and Time Programming Guide for Cocoa"
 	// we'll use the default calendar and hope for the best
 	
-	NSCalendar *calendar = [NSCalendar currentCalendar];
-	NSDate *beginningOfWeek = nil;
+    NSDate *beginningOfWeek = nil;
 	BOOL ok = [calendar rangeOfUnit:NSWeekCalendarUnit startDate:&beginningOfWeek
 						   interval:NULL forDate:self];
 	if (ok) {
@@ -218,16 +224,14 @@
 }
 
 - (NSDate *)beginningOfDay {
-	NSCalendar *calendar = [NSCalendar currentCalendar];
-	// Get the weekday component of the current date
+    // Get the weekday component of the current date
 	NSDateComponents *components = [calendar components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit) 
 											   fromDate:self];
 	return [calendar dateFromComponents:components];
 }
 
 - (NSDate *)endOfWeek {
-	NSCalendar *calendar = [NSCalendar currentCalendar];
-	// Get the weekday component of the current date
+    // Get the weekday component of the current date
 	NSDateComponents *weekdayComponents = [calendar components:NSWeekdayCalendarUnit fromDate:self];
 	NSDateComponents *componentsToAdd = [[NSDateComponents alloc] init];
 	// to get the end of week for a particular date, add (7 - weekday) days
