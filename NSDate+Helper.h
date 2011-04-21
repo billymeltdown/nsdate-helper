@@ -44,6 +44,7 @@
 + (NSString *)stringFromDate:(NSDate *)date;
 + (NSString *)stringForDisplayFromDate:(NSDate *)date;
 + (NSString *)stringForDisplayFromDate:(NSDate *)date prefixed:(BOOL)prefixed;
++ (NSString *)stringForDisplayFromDate:(NSDate *)date prefixed:(BOOL)prefixed alwaysDisplayTime:(BOOL)displayTime;
 
 - (NSString *)string;
 - (NSString *)stringWithFormat:(NSString *)format;
