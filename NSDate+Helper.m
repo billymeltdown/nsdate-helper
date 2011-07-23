@@ -107,6 +107,12 @@ static NSDateFormatter *displayFormatter;
 	return [date stringWithFormat:format];
 }
 
++ (NSString *)stringFromDate:(NSDate *)date withFormat:(NSString *)format timeZone:(NSTimeZone *)timeZone {
+    return [date stringWithFormat:format timeZone:timeZone];
+}
+
+//timeZone:(NSTimeZone *)timeZone
+
 + (NSString *)stringFromDate:(NSDate *)date {
 	return [date string];
 }
@@ -189,6 +195,15 @@ static NSDateFormatter *displayFormatter;
 - (NSString *)stringWithFormat:(NSString *)format {
 	NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
 	[outputFormatter setDateFormat:format];
+	NSString *timestamp_str = [outputFormatter stringFromDate:self];
+	[outputFormatter release];
+	return timestamp_str;
+}
+
+- (NSString *)stringWithFormat:(NSString *)format timeZone:(NSTimeZone *)timeZone {
+	NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
+	[outputFormatter setDateFormat:format];
+    [outputFormatter setTimeZone:timeZone];
 	NSString *timestamp_str = [outputFormatter stringFromDate:self];
 	[outputFormatter release];
 	return timestamp_str;

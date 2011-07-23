@@ -41,6 +41,7 @@
 + (NSDate *)dateFromString:(NSString *)string;
 + (NSDate *)dateFromString:(NSString *)string withFormat:(NSString *)format;
 + (NSString *)stringFromDate:(NSDate *)date withFormat:(NSString *)string;
++ (NSString *)stringFromDate:(NSDate *)date withFormat:(NSString *)format timeZone:(NSTimeZone *)timeZone;
 + (NSString *)stringFromDate:(NSDate *)date;
 + (NSString *)stringForDisplayFromDate:(NSDate *)date;
 + (NSString *)stringForDisplayFromDate:(NSDate *)date prefixed:(BOOL)prefixed;
@@ -48,6 +49,7 @@
 
 - (NSString *)string;
 - (NSString *)stringWithFormat:(NSString *)format;
+- (NSString *)stringWithFormat:(NSString *)format timeZone:(NSTimeZone *)timeZone;
 - (NSString *)stringWithDateStyle:(NSDateFormatterStyle)dateStyle timeStyle:(NSDateFormatterStyle)timeStyle;
 
 - (NSDate *)beginningOfWeek;
