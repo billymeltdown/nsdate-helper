@@ -36,12 +36,16 @@ static NSDateFormatter *displayFormatter;
 @implementation NSDate (Helper)
 
 + (void)load {
-#if !__has_feature(objc_arc)
+#if __has_feature(objc_arc)
+    @autoreleasepool {
+#else
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 #endif
     displayFormatter = [[NSDateFormatter alloc] init];
     calendar = [NSCalendar currentCalendar];
-#if !__has_feature(objc_arc)
+#if __has_feature(objc_arc)
+    }
+#else
     [calendar retain];
 	[pool drain];
 #endif
