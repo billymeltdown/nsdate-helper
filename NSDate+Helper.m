@@ -38,14 +38,13 @@ static NSDateFormatter *displayFormatter;
 + (void)load {
 #if __has_feature(objc_arc)
     @autoreleasepool {
-#else
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-#endif
-    displayFormatter = [[NSDateFormatter alloc] init];
-    calendar = [NSCalendar currentCalendar];
-#if __has_feature(objc_arc)
+        displayFormatter = [[NSDateFormatter alloc] init];
+        calendar = [NSCalendar currentCalendar];
     }
 #else
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    displayFormatter = [[NSDateFormatter alloc] init];
+    calendar = [NSCalendar currentCalendar];
     [calendar retain];
 	[pool drain];
 #endif
