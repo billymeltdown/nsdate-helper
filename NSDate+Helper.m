@@ -2,7 +2,7 @@
 // NSDate+Helper.h
 //
 // Created by Billy Gray on 2/26/09.
-// Copyright (c) 2009, 2010, ZETETIC LLC
+// Copyright (c) 2009–2012, ZETETIC LLC
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -111,29 +111,22 @@
     NSCalendar *calendar = [NSCalendar currentCalendar];
     NSDateFormatter *displayFormatter = [[NSDateFormatter alloc] init];
     
-	NSLog(@"date in question: %@", date);
 	NSDate *today = [NSDate date];
-    NSLog(@"today is: %@", today);
     NSDateComponents *offsetComponents = [calendar components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit) 
 													 fromDate:today];
 	
 	NSDate *midnight = [calendar dateFromComponents:offsetComponents];
-	NSLog(@"midnight is: %@", midnight);
 	NSString *displayString = nil;
 	
 	// comparing against midnight
     NSComparisonResult midnight_result = [date compare:midnight];
 	if (midnight_result == NSOrderedDescending) {
-        NSLog(@"last sync was since midnight, formatting for today");
 		if (prefixed) {
-            NSLog(@"going for prefixed format...");
 			[displayFormatter setDateFormat:@"'at' h:mm a"]; // at 11:30 am
 		} else {
-            NSLog(@"going for format 'h:mm a'");
 			[displayFormatter setDateFormat:@"h:mm a"]; // 11:30 am
 		}
 	} else {
-        NSLog(@"date within last 7 days?");
 		// check if date is within last 7 days
 		NSDateComponents *componentsToSubtract = [[NSDateComponents alloc] init];
 		[componentsToSubtract setDay:-7];
@@ -141,10 +134,8 @@
 		[componentsToSubtract release];
         NSComparisonResult lastweek_result = [date compare:lastweek];
 		if (lastweek_result == NSOrderedDescending) {
-            NSLog(@"date IS within the last 7! formatting with EEEE");
 			[displayFormatter setDateFormat:@"EEEE"]; // Tuesday
 		} else {
-            NSLog(@"checking if within same year instead...");
 			// check if same calendar year
 			NSInteger thisYear = [offsetComponents year];
 			
@@ -152,15 +143,12 @@
 														   fromDate:date];
 			NSInteger thatYear = [dateComponents year];			
 			if (thatYear >= thisYear) {
-                NSLog(@"same year! formatting with MMM d");
 				[displayFormatter setDateFormat:@"MMM d"];
 			} else {
-                NSLog(@"now, going for long format MMM d, yyyy");
 				[displayFormatter setDateFormat:@"MMM d, yyyy"];
 			}
 		}
 		if (prefixed) {
-            NSLog(@"throwing a prefix on this guy");
 			NSString *dateFormat = [displayFormatter dateFormat];
 			NSString *prefix = @"'on' ";
 			[displayFormatter setDateFormat:[prefix stringByAppendingString:dateFormat]];
