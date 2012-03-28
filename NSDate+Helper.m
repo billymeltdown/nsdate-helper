@@ -30,25 +30,14 @@
 
 #import "NSDate+Helper.h"
 
-static NSCalendar *calendar;
-static NSDateFormatter *displayFormatter;
-
 @implementation NSDate (Helper)
-
-+ (void)load {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    
-    calendar = [[NSCalendar currentCalendar] retain];
-    displayFormatter = [[NSDateFormatter alloc] init];
-    
-	[pool drain];
-}
 
 /*
  * This guy can be a little unreliable and produce unexpected results,
  * you're better off using daysAgoAgainstMidnight
  */
 - (NSUInteger)daysAgo {
+    NSCalendar *calendar = [NSCalendar currentCalendar];
     NSDateComponents *components = [calendar components:(NSDayCalendarUnit) 
 											   fromDate:self
 												 toDate:[NSDate date]
@@ -87,6 +76,7 @@ static NSDateFormatter *displayFormatter;
 }
 
 - (NSUInteger)weekday {
+    NSCalendar *calendar = [NSCalendar currentCalendar];
     NSDateComponents *weekdayComponents = [calendar components:(NSWeekdayCalendarUnit) fromDate:self];
 	return [weekdayComponents weekday];
 }
@@ -111,42 +101,50 @@ static NSDateFormatter *displayFormatter;
 	return [date string];
 }
 
-+ (NSString *)stringForDisplayFromDate:(NSDate *)date prefixed:(BOOL)prefixed alwaysDisplayTime:(BOOL)displayTime
-{
-    /* 
++ (NSString *)stringForDisplayFromDate:(NSDate *)date prefixed:(BOOL)prefixed {
+	/* 
 	 * if the date is in today, display 12-hour time with meridian,
 	 * if it is within the last 7 days, display weekday name (Friday)
 	 * if within the calendar year, display as Jan 23
 	 * else display as Nov 11, 2008
 	 */
-	
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateFormatter *displayFormatter = [[NSDateFormatter alloc] init];
+    
+	NSLog(@"date in question: %@", date);
 	NSDate *today = [NSDate date];
+    NSLog(@"today is: %@", today);
     NSDateComponents *offsetComponents = [calendar components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit) 
 													 fromDate:today];
 	
 	NSDate *midnight = [calendar dateFromComponents:offsetComponents];
-	
+	NSLog(@"midnight is: %@", midnight);
 	NSString *displayString = nil;
 	
 	// comparing against midnight
-	if ([date compare:midnight] == NSOrderedDescending) {
+    NSComparisonResult midnight_result = [date compare:midnight];
+	if (midnight_result == NSOrderedDescending) {
+        NSLog(@"last sync was since midnight, formatting for today");
 		if (prefixed) {
+            NSLog(@"going for prefixed format...");
 			[displayFormatter setDateFormat:@"'at' h:mm a"]; // at 11:30 am
 		} else {
+            NSLog(@"going for format 'h:mm a'");
 			[displayFormatter setDateFormat:@"h:mm a"]; // 11:30 am
 		}
 	} else {
+        NSLog(@"date within last 7 days?");
 		// check if date is within last 7 days
 		NSDateComponents *componentsToSubtract = [[NSDateComponents alloc] init];
 		[componentsToSubtract setDay:-7];
 		NSDate *lastweek = [calendar dateByAddingComponents:componentsToSubtract toDate:today options:0];
 		[componentsToSubtract release];
-		if ([date compare:lastweek] == NSOrderedDescending) {
-            if (displayTime)
-                [displayFormatter setDateFormat:@"EEEE h:mm a"]; // Tuesday
-            else
-                [displayFormatter setDateFormat:@"EEEE"]; // Tuesday
+        NSComparisonResult lastweek_result = [date compare:lastweek];
+		if (lastweek_result == NSOrderedDescending) {
+            NSLog(@"date IS within the last 7! formatting with EEEE");
+			[displayFormatter setDateFormat:@"EEEE"]; // Tuesday
 		} else {
+            NSLog(@"checking if within same year instead...");
 			// check if same calendar year
 			NSInteger thisYear = [offsetComponents year];
 			
@@ -154,18 +152,15 @@ static NSDateFormatter *displayFormatter;
 														   fromDate:date];
 			NSInteger thatYear = [dateComponents year];			
 			if (thatYear >= thisYear) {
-                if (displayTime)
-                    [displayFormatter setDateFormat:@"MMM d h:mm a"];
-                else
-                    [displayFormatter setDateFormat:@"MMM d"];
+                NSLog(@"same year! formatting with MMM d");
+				[displayFormatter setDateFormat:@"MMM d"];
 			} else {
-                if (displayTime)
-                    [displayFormatter setDateFormat:@"MMM d, yyyy h:mm a"];
-                else
-                    [displayFormatter setDateFormat:@"MMM d, yyyy"];
+                NSLog(@"now, going for long format MMM d, yyyy");
+				[displayFormatter setDateFormat:@"MMM d, yyyy"];
 			}
 		}
 		if (prefixed) {
+            NSLog(@"throwing a prefix on this guy");
 			NSString *dateFormat = [displayFormatter dateFormat];
 			NSString *prefix = @"'on' ";
 			[displayFormatter setDateFormat:[prefix stringByAppendingString:dateFormat]];
@@ -174,12 +169,10 @@ static NSDateFormatter *displayFormatter;
 	
 	// use display formatter to return formatted date string
 	displayString = [displayFormatter stringFromDate:date];
+    
+    [displayFormatter release];
+    
 	return displayString;
-}
-
-+ (NSString *)stringForDisplayFromDate:(NSDate *)date prefixed:(BOOL)prefixed {
-    // preserve prior behavior
-	return [self stringForDisplayFromDate:date prefixed:prefixed alwaysDisplayTime:NO];
 }
 
 + (NSString *)stringForDisplayFromDate:(NSDate *)date {
@@ -210,7 +203,7 @@ static NSDateFormatter *displayFormatter;
 - (NSDate *)beginningOfWeek {
 	// largely borrowed from "Date and Time Programming Guide for Cocoa"
 	// we'll use the default calendar and hope for the best
-	
+	NSCalendar *calendar = [NSCalendar currentCalendar];
     NSDate *beginningOfWeek = nil;
 	BOOL ok = [calendar rangeOfUnit:NSWeekCalendarUnit startDate:&beginningOfWeek
 						   interval:NULL forDate:self];
@@ -239,6 +232,7 @@ static NSDateFormatter *displayFormatter;
 }
 
 - (NSDate *)beginningOfDay {
+    NSCalendar *calendar = [NSCalendar currentCalendar];
     // Get the weekday component of the current date
 	NSDateComponents *components = [calendar components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit) 
 											   fromDate:self];
@@ -246,6 +240,7 @@ static NSDateFormatter *displayFormatter;
 }
 
 - (NSDate *)endOfWeek {
+    NSCalendar *calendar = [NSCalendar currentCalendar];
     // Get the weekday component of the current date
 	NSDateComponents *weekdayComponents = [calendar components:NSWeekdayCalendarUnit fromDate:self];
 	NSDateComponents *componentsToAdd = [[NSDateComponents alloc] init];
