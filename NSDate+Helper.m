@@ -101,8 +101,8 @@
 	return [date string];
 }
 
-+ (NSString *)stringForDisplayFromDate:(NSDate *)date prefixed:(BOOL)prefixed {
-	/* 
++ (NSString *)stringForDisplayFromDate:(NSDate *)date prefixed:(BOOL)prefixed alwaysDisplayTime:(BOOL)displayTime {
+    /* 
 	 * if the date is in today, display 12-hour time with meridian,
 	 * if it is within the last 7 days, display weekday name (Friday)
 	 * if within the calendar year, display as Jan 23
@@ -134,7 +134,11 @@
 		[componentsToSubtract release];
         NSComparisonResult lastweek_result = [date compare:lastweek];
 		if (lastweek_result == NSOrderedDescending) {
-			[displayFormatter setDateFormat:@"EEEE"]; // Tuesday
+            if (displayTime) {
+                [displayFormatter setDateFormat:@"EEEE h:mm a"];
+            } else {
+                [displayFormatter setDateFormat:@"EEEE"]; // Tuesday
+            }
 		} else {
 			// check if same calendar year
 			NSInteger thisYear = [offsetComponents year];
@@ -143,9 +147,19 @@
 														   fromDate:date];
 			NSInteger thatYear = [dateComponents year];			
 			if (thatYear >= thisYear) {
-				[displayFormatter setDateFormat:@"MMM d"];
+                if (displayTime) {
+                    [displayFormatter setDateFormat:@"MMM d h:mm a"];
+                }
+                else {
+                    [displayFormatter setDateFormat:@"MMM d"];
+                }
 			} else {
-				[displayFormatter setDateFormat:@"MMM d, yyyy"];
+                if (displayTime) {
+                    [displayFormatter setDateFormat:@"MMM d, yyyy h:mm a"];
+                }
+                else {
+                    [displayFormatter setDateFormat:@"MMM d, yyyy"];
+                }
 			}
 		}
 		if (prefixed) {
@@ -161,6 +175,10 @@
     [displayFormatter release];
     
 	return displayString;
+}
+
++ (NSString *)stringForDisplayFromDate:(NSDate *)date prefixed:(BOOL)prefixed {
+	return [[self class] stringForDisplayFromDate:date prefixed:prefixed alwaysDisplayTime:NO];
 }
 
 + (NSString *)stringForDisplayFromDate:(NSDate *)date {
