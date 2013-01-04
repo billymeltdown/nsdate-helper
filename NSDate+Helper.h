@@ -38,6 +38,9 @@
 - (NSString *)stringDaysAgoAgainstMidnight:(BOOL)flag;
 - (NSUInteger)weekday;
 - (NSUInteger)weekNumber;
+- (NSUInteger)hour;
+- (NSUInteger)minute;
+- (NSUInteger)year;
 
 + (NSDate *)dateFromString:(NSString *)string;
 + (NSDate *)dateFromString:(NSString *)string withFormat:(NSString *)format;

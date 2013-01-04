@@ -75,6 +75,24 @@
 	return text;
 }
 
+- (NSUInteger)hour {
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *weekdayComponents = [calendar components:(NSHourCalendarUnit) fromDate:self];
+	return [weekdayComponents hour];
+}
+
+- (NSUInteger)minute {
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *weekdayComponents = [calendar components:(NSMinuteCalendarUnit) fromDate:self];
+	return [weekdayComponents minute];
+}
+
+- (NSUInteger)year {
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *weekdayComponents = [calendar components:(NSYearCalendarUnit) fromDate:self];
+	return [weekdayComponents year];
+}
+
 - (NSUInteger)weekday {
     NSCalendar *calendar = [NSCalendar currentCalendar];
     NSDateComponents *weekdayComponents = [calendar components:(NSWeekdayCalendarUnit) fromDate:self];
