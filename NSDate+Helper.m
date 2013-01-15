@@ -93,15 +93,8 @@
 	return [weekdayComponents year];
 }
 
-- (NSTimeInterval)utcTimeStamp{
-    NSDateComponents *comps = [[NSCalendar currentCalendar]
-                               components:NSDayCalendarUnit | NSYearCalendarUnit | NSMonthCalendarUnit
-                               fromDate:[NSDate date]];
-    [comps setHour:0];
-    [comps setMinute:0];
-    [comps setSecond:[[NSTimeZone systemTimeZone] secondsFromGMT]];
-    
-    return [[[NSCalendar currentCalendar] dateFromComponents:comps] timeIntervalSince1970];
+- (long int)utcTimeStamp{
+    return lround(floor([self timeIntervalSince1970]));
 }
 
 - (NSUInteger)weekday {
