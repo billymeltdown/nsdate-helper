@@ -32,6 +32,8 @@
 
 @interface NSDate (Helper)
 
++ (void)initializeStatics;
+
 - (NSUInteger)daysAgo;
 - (NSUInteger)daysAgoAgainstMidnight;
 - (NSString *)stringDaysAgo;
