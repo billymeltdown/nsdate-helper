@@ -4,7 +4,7 @@
 // Created by Billy Gray on 2/26/09.
 // Copyright (c) 2009, 2010, ZETETIC LLC
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
 //     * Redistributions of source code must retain the above copyright
@@ -15,7 +15,7 @@
 //     * Neither the name of the ZETETIC LLC nor the
 //       names of its contributors may be used to endorse or promote products
 //       derived from this software without specific prior written permission.
-// 
+//
 // THIS SOFTWARE IS PROVIDED BY ZETETIC LLC ''AS IS'' AND ANY
 // EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 // WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -34,6 +34,8 @@
 
 + (void)initializeStatics;
 
++ (NSCalendar *)sharedCalendar;
++ (NSDateFormatter *)sharedDateFormatter;
 - (NSUInteger)daysAgo;
 - (NSUInteger)daysAgoAgainstMidnight;
 - (NSString *)stringDaysAgo;
@@ -44,7 +46,6 @@
 - (NSUInteger)minute;
 - (NSUInteger)year;
 - (long int)utcTimeStamp; //full seconds since
-
 + (NSDate *)dateFromString:(NSString *)string;
 + (NSDate *)dateFromString:(NSString *)string withFormat:(NSString *)format;
 + (NSString *)stringFromDate:(NSDate *)date withFormat:(NSString *)string;
@@ -52,15 +53,12 @@
 + (NSString *)stringForDisplayFromDate:(NSDate *)date;
 + (NSString *)stringForDisplayFromDate:(NSDate *)date prefixed:(BOOL)prefixed;
 + (NSString *)stringForDisplayFromDate:(NSDate *)date prefixed:(BOOL)prefixed alwaysDisplayTime:(BOOL)displayTime;
-
 - (NSString *)string;
 - (NSString *)stringWithFormat:(NSString *)format;
 - (NSString *)stringWithDateStyle:(NSDateFormatterStyle)dateStyle timeStyle:(NSDateFormatterStyle)timeStyle;
-
 - (NSDate *)beginningOfWeek;
 - (NSDate *)beginningOfDay;
 - (NSDate *)endOfWeek;
-
 + (NSString *)dateFormatString;
 + (NSString *)timeFormatString;
 + (NSString *)timestampFormatString;
