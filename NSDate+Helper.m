@@ -50,11 +50,17 @@ static NSDateFormatter *_displayFormatter = nil;
 + (void)initializeStatics {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        if (_calendar == nil) {
-            _calendar = [[NSCalendar currentCalendar] retain];
-        }
-        if (_displayFormatter == nil) {
-            _displayFormatter = [[NSDateFormatter alloc] init];
+        @autoreleasepool {
+            if (_calendar == nil) {
+#if __has_feature(objc_arc)
+                _calendar = [NSCalendar currentCalendar];
+#else
+                _calendar = [[NSCalendar currentCalendar] retain];
+#endif
+            }
+            if (_displayFormatter == nil) {
+                _displayFormatter = [[NSDateFormatter alloc] init];
+            }
         }
     });
 }
@@ -141,10 +147,8 @@ static NSDateFormatter *_displayFormatter = nil;
 	NSDate *today = [NSDate date];
     NSDateComponents *offsetComponents = [_calendar components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit)
                                                       fromDate:today];
-	
 	NSDate *midnight = [_calendar dateFromComponents:offsetComponents];
 	NSString *displayString = nil;
-	
 	// comparing against midnight
     NSComparisonResult midnight_result = [date compare:midnight];
 	if (midnight_result == NSOrderedDescending) {
@@ -158,7 +162,9 @@ static NSDateFormatter *_displayFormatter = nil;
 		NSDateComponents *componentsToSubtract = [[NSDateComponents alloc] init];
 		[componentsToSubtract setDay:-7];
 		NSDate *lastweek = [_calendar dateByAddingComponents:componentsToSubtract toDate:today options:0];
+#if !__has_feature(objc_arc)
 		[componentsToSubtract release];
+#endif
         NSComparisonResult lastweek_result = [date compare:lastweek];
 		if (lastweek_result == NSOrderedDescending) {
             if (displayTime) {
@@ -169,7 +175,6 @@ static NSDateFormatter *_displayFormatter = nil;
 		} else {
 			// check if same calendar year
 			NSInteger thisYear = [offsetComponents year];
-			
 			NSDateComponents *dateComponents = [_calendar components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit)
                                                             fromDate:date];
 			NSInteger thatYear = [dateComponents year];
@@ -195,7 +200,6 @@ static NSDateFormatter *_displayFormatter = nil;
 			[_displayFormatter setDateFormat:[prefix stringByAppendingString:dateFormat]];
 		}
 	}
-	
 	// use display formatter to return formatted date string
 	displayString = [_displayFormatter stringFromDate:date];
 	return displayString;
@@ -210,6 +214,7 @@ static NSDateFormatter *_displayFormatter = nil;
 }
 
 - (NSString *)stringWithFormat:(NSString *)format {
+    [[self class] initializeStatics];
 	[_displayFormatter setDateFormat:format];
 	NSString *timestamp_str = [_displayFormatter stringFromDate:self];
 	return timestamp_str;
@@ -220,6 +225,7 @@ static NSDateFormatter *_displayFormatter = nil;
 }
 
 - (NSString *)stringWithDateStyle:(NSDateFormatterStyle)dateStyle timeStyle:(NSDateFormatterStyle)timeStyle {
+    [[self class] initializeStatics];
 	[_displayFormatter setDateStyle:dateStyle];
 	[_displayFormatter setTimeStyle:timeStyle];
 	NSString *outputString = [_displayFormatter stringFromDate:self];
@@ -227,20 +233,19 @@ static NSDateFormatter *_displayFormatter = nil;
 }
 
 - (NSDate *)beginningOfWeek {
+    [[self class] initializeStatics];
 	// largely borrowed from "Date and Time Programming Guide for Cocoa"
 	// we'll use the default calendar and hope for the best
-	NSCalendar *calendar = [NSCalendar currentCalendar];
+	NSCalendar *calendar = _calendar;
     NSDate *beginningOfWeek = nil;
 	BOOL ok = [calendar rangeOfUnit:NSWeekCalendarUnit startDate:&beginningOfWeek
 						   interval:NULL forDate:self];
 	if (ok) {
 		return beginningOfWeek;
 	}
-	
 	// couldn't calc via range, so try to grab Sunday, assuming gregorian style
 	// Get the weekday component of the current date
 	NSDateComponents *weekdayComponents = [calendar components:NSWeekdayCalendarUnit fromDate:self];
-	
 	/*
 	 Create a date components to represent the number of days to subtract from the current date.
 	 The weekday value for Sunday in the Gregorian calendar is 1, so subtract 1 from the number of days to subtract from the date in question.  (If today's Sunday, subtract 0 days.)
@@ -249,8 +254,9 @@ static NSDateFormatter *_displayFormatter = nil;
 	[componentsToSubtract setDay: 0 - ([weekdayComponents weekday] - 1)];
 	beginningOfWeek = nil;
 	beginningOfWeek = [calendar dateByAddingComponents:componentsToSubtract toDate:self options:0];
+#if !__has_feature(objc_arc)
 	[componentsToSubtract release];
-	
+#endif
 	//normalize to midnight, extract the year, month, and day components and create a new date from those components.
 	NSDateComponents *components = [calendar components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit)
 											   fromDate:beginningOfWeek];
@@ -258,7 +264,8 @@ static NSDateFormatter *_displayFormatter = nil;
 }
 
 - (NSDate *)beginningOfDay {
-    NSCalendar *calendar = [NSCalendar currentCalendar];
+    [[self class] initializeStatics];
+    NSCalendar *calendar = _calendar;
     // Get the weekday component of the current date
 	NSDateComponents *components = [calendar components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit)
 											   fromDate:self];
@@ -266,15 +273,17 @@ static NSDateFormatter *_displayFormatter = nil;
 }
 
 - (NSDate *)endOfWeek {
-    NSCalendar *calendar = [NSCalendar currentCalendar];
+    [[self class] initializeStatics];
+    NSCalendar *calendar = _calendar;
     // Get the weekday component of the current date
 	NSDateComponents *weekdayComponents = [calendar components:NSWeekdayCalendarUnit fromDate:self];
 	NSDateComponents *componentsToAdd = [[NSDateComponents alloc] init];
 	// to get the end of week for a particular date, add (7 - weekday) days
 	[componentsToAdd setDay:(7 - [weekdayComponents weekday])];
 	NSDate *endOfWeek = [calendar dateByAddingComponents:componentsToAdd toDate:self options:0];
+#if !__has_feature(objc_arc)
 	[componentsToAdd release];
-	
+#endif
 	return endOfWeek;
 }
 
