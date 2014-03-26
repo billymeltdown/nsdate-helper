@@ -114,6 +114,13 @@ static NSDateFormatter *_displayFormatter = nil;
 	return [weekdayComponents weekday];
 }
 
+- (NSUInteger)weekNumber {
+    [[self class] initializeStatics];
+    NSCalendar *calendar = _calendar;
+    NSDateComponents *dateComponents = [calendar components:(NSWeekCalendarUnit) fromDate:self];
+    return [dateComponents week]; 
+}
+
 + (NSDate *)dateFromString:(NSString *)string {
     [self initializeStatics];
 	return [NSDate dateFromString:string withFormat:[NSDate dbFormatString]];
