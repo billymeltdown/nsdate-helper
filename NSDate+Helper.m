@@ -108,9 +108,9 @@ static NSDateFormatter *_displayFormatter = nil;
 	return [weekdayComponents weekday];
 }
 
-- (NSUInteger)weekNumber
-{
-    NSCalendar *calendar = [NSCalendar currentCalendar];
+- (NSUInteger)weekNumber {
+    [[self class] initializeStatics];
+    NSCalendar *calendar = _calendar;
     NSDateComponents *dateComponents = [calendar components:(NSWeekCalendarUnit) fromDate:self];
     return [dateComponents week]; 
 }
