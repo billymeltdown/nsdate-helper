@@ -102,10 +102,39 @@ static NSDateFormatter *_displayFormatter = nil;
 	return text;
 }
 
+- (NSUInteger)hour {
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *weekdayComponents = [calendar components:(NSHourCalendarUnit) fromDate:self];
+	return [weekdayComponents hour];
+}
+
+- (NSUInteger)minute {
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *weekdayComponents = [calendar components:(NSMinuteCalendarUnit) fromDate:self];
+	return [weekdayComponents minute];
+}
+
+- (NSUInteger)year {
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *weekdayComponents = [calendar components:(NSYearCalendarUnit) fromDate:self];
+	return [weekdayComponents year];
+}
+
+- (long int)utcTimeStamp{
+    return lround(floor([self timeIntervalSince1970]));
+}
+
 - (NSUInteger)weekday {
     [[self class] initializeStatics];
     NSDateComponents *weekdayComponents = [_calendar components:(NSWeekdayCalendarUnit) fromDate:self];
 	return [weekdayComponents weekday];
+}
+
+- (NSUInteger)weekNumber
+{
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *dateComponents = [calendar components:(NSWeekCalendarUnit) fromDate:self];
+    return [dateComponents week]; 
 }
 
 + (NSDate *)dateFromString:(NSString *)string {
