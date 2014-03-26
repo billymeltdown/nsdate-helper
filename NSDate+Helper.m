@@ -91,13 +91,13 @@ static NSDateFormatter *_displayFormatter = nil;
 	NSString *text = nil;
 	switch (daysAgo) {
 		case 0:
-			text = @"Today";
+			text = NSLocalizedString(@"Today", nil);
 			break;
 		case 1:
-			text = @"Yesterday";
+			text = NSLocalizedString(@"Yesterday", nil);
 			break;
 		default:
-			text = [NSString stringWithFormat:@"%d days ago", (int)daysAgo];
+			text = [NSString stringWithFormat:@"%ld days ago", (NSInteger)daysAgo];
 	}
 	return text;
 }
