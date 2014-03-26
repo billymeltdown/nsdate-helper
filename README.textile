@@ -15,18 +15,18 @@ Two convenience methods make it easy for you to display some relative date infor
 <pre><code>
   NSString *displayString = [NSDate stringForDisplayFromDate:date];
 </code></pre>
-  
+
 This produces the following kinds of output:
-  
+
 * '3:42 AM' - if the date is after midnight today
 * 'Tuesday' - if the date is within the last seven days
 * 'Mar 1' - if the date is within the current calendar year
 * 'Mar 1, 2008' - else ;-)
-  
+
 <pre><code>
   NSString *displayString = [NSDate stringForDisplayFromDate:date prefixed:YES];
 </code></pre>
-  
+
 This produces the same as above, but prefixed with 'at' or 'on' depending on the appropriate English syntax.
 
 Another set of methods provide days-ago information:
@@ -37,22 +37,24 @@ Another set of methods provide days-ago information:
   [date daysAgoAgainstMidnight]; // better version of daysAgo, works off midnight (hat-tip: "sburlot":http://github.com/sburlot)
   [date stringDaysAgo]; // 'Today', 'Yesterday', or 'N days ago'.
 </code></pre>
-  
+
 Tired of creating and releasing date formatters? Missing things like @to_s(:db)@? Me, too. @NSDate (Helper)@ has some static methods to make going back and forth between strings and dates a little less painful, and particularly easier when working with database timestamps (a la SQLite):
 
 <pre><code>
-  NSDate *date = [NSDate dateFromString:@"2009-03-01 12:15:23"]; 
+  NSDate *date = [NSDate dateFromString:@"2009-03-01 12:15:23"];
   NSString *dbDateString = [NSDate stringFromDate:date]; // returns '2009-03-01 12:15:23'
 </code></pre>
-  
+
 Who needs NSDateFormatter?
-  
+
+<pre><code>
   NSString *otherDateString = [NSDate stringFromDate:date withFormat:@"EEEE"]; // use any format you like
+</code></pre>
 
 h3. Installation
 
 To use it in your Cocoa project, import the header and implementation files, and then add the header to your project's <projectname>_prefix.pch file so that it's available across your project:
-  
+
 <pre><code>
 #ifdef __OBJC__
     #import <Foundation/Foundation.h>
