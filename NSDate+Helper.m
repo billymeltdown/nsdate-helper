@@ -4,7 +4,7 @@
 // Created by Billy Gray on 2/26/09.
 // Copyright (c) 2009–2012, ZETETIC LLC
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
 //     * Redistributions of source code must retain the above copyright
@@ -15,7 +15,7 @@
 //     * Neither the name of the ZETETIC LLC nor the
 //       names of its contributors may be used to endorse or promote products
 //       derived from this software without specific prior written permission.
-// 
+//
 // THIS SOFTWARE IS PROVIDED BY ZETETIC LLC ''AS IS'' AND ANY
 // EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 // WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -30,8 +30,6 @@
 
 #import "NSDate+Helper.h"
 
-static NSCalendar *_calendar = nil;
-static NSDateFormatter *_displayFormatter = nil;
 static NSString *kNSDateHelperFormatFullDateWithTime    = @"MMM d, yyyy h:mm a";
 static NSString *kNSDateHelperFormatFullDate            = @"MMM d, yyyy";
 static NSString *kNSDateHelperFormatShortDateWithTime   = @"MMM d h:mm a";
@@ -45,6 +43,9 @@ static NSString *kNSDateHelperFormatSQLTime             = @"HH:mm:ss";
 static NSString *kNSDateHelperFormatSQLDateWithTime     = @"yyyy-MM-dd HH:mm:ss";
 
 @implementation NSDate (Helper)
+
+static NSCalendar *_calendar = nil;
+static NSDateFormatter *_displayFormatter = nil;
 
 + (void)initializeStatics {
     static dispatch_once_t onceToken;
@@ -81,6 +82,7 @@ static NSString *kNSDateHelperFormatSQLDateWithTime     = @"yyyy-MM-dd HH:mm:ss"
 }
 
 - (NSString *)stringDaysAgo {
+    [[self class] initializeStatics];
 	return [self stringDaysAgoAgainstMidnight:YES];
 }
 
@@ -107,6 +109,7 @@ static NSString *kNSDateHelperFormatSQLDateWithTime     = @"yyyy-MM-dd HH:mm:ss"
 }
 
 + (NSDate *)dateFromString:(NSString *)string {
+    [self initializeStatics];
 	return [NSDate dateFromString:string withFormat:[NSDate dbFormatString]];
 }
 
@@ -118,16 +121,18 @@ static NSString *kNSDateHelperFormatSQLDateWithTime     = @"yyyy-MM-dd HH:mm:ss"
 }
 
 + (NSString *)stringFromDate:(NSDate *)date withFormat:(NSString *)format {
+    [self initializeStatics];
 	return [date stringWithFormat:format];
 }
 
 + (NSString *)stringFromDate:(NSDate *)date {
+    [self initializeStatics];
 	return [date string];
 }
 
 + (NSString *)stringForDisplayFromDate:(NSDate *)date prefixed:(BOOL)prefixed alwaysDisplayTime:(BOOL)displayTime {
     [self initializeStatics];
-    /* 
+    /*
 	 * if the date is in today, display 12-hour time with meridian,
 	 * if it is within the last 7 days, display weekday name (Friday)
 	 * if within the calendar year, display as Jan 23
@@ -167,7 +172,7 @@ static NSString *kNSDateHelperFormatSQLDateWithTime     = @"yyyy-MM-dd HH:mm:ss"
 			
 			NSDateComponents *dateComponents = [_calendar components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit)
                                                             fromDate:date];
-			NSInteger thatYear = [dateComponents year];			
+			NSInteger thatYear = [dateComponents year];
 			if (thatYear >= thisYear) {
                 if (displayTime) {
                     [_displayFormatter setDateFormat:kNSDateHelperFormatShortDateWithTime];
@@ -230,7 +235,7 @@ static NSString *kNSDateHelperFormatSQLDateWithTime     = @"yyyy-MM-dd HH:mm:ss"
 						   interval:NULL forDate:self];
 	if (ok) {
 		return beginningOfWeek;
-	} 
+	}
 	
 	// couldn't calc via range, so try to grab Sunday, assuming gregorian style
 	// Get the weekday component of the current date
@@ -255,7 +260,7 @@ static NSString *kNSDateHelperFormatSQLDateWithTime     = @"yyyy-MM-dd HH:mm:ss"
 - (NSDate *)beginningOfDay {
     NSCalendar *calendar = [NSCalendar currentCalendar];
     // Get the weekday component of the current date
-	NSDateComponents *components = [calendar components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit) 
+	NSDateComponents *components = [calendar components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit)
 											   fromDate:self];
 	return [calendar dateFromComponents:components];
 }
@@ -286,7 +291,7 @@ static NSString *kNSDateHelperFormatSQLDateWithTime     = @"yyyy-MM-dd HH:mm:ss"
 }
 
 // preserving for compatibility
-+ (NSString *)dbFormatString {	
++ (NSString *)dbFormatString {
 	return [NSDate timestampFormatString];
 }
 
