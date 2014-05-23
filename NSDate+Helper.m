@@ -245,6 +245,7 @@ static NSDateFormatter *_displayFormatter = nil;
 }
 
 - (NSString *)stringWithFormat:(NSString *)format {
+	[[self class] initializeStatics];
 	[[[self class] sharedDateFormatter] setDateFormat:format];
 	NSString *timestamp_str = [[[self class] sharedDateFormatter] stringFromDate:self];
 	return timestamp_str;
