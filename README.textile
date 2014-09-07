@@ -4,6 +4,8 @@ This is a category for the @NSDate@ class that provides some convenience methods
 
 More information can be found at my "initial blog post":http://www.zetetic.net/blog/2009/03/11/nsdate-helper/.
 
+You can add this category to your Xcpde project via "CoaoaPods":http://www.cocoapods.org.
+
 Anyone is welcome to use it for anything, and to change it as they see fit. If you'd like to contribute back any changes (woot!), please fork and send a pull request!
 
 h3. Usage
