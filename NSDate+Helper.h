@@ -38,6 +38,7 @@
 + (NSDateFormatter *)sharedDateFormatter;
 - (NSUInteger)daysAgo;
 - (NSUInteger)daysAgoAgainstMidnight;
+- (NSInteger)dayTime; //reture 20141225
 - (NSString *)stringDaysAgo;
 - (NSString *)stringDaysAgoAgainstMidnight:(BOOL)flag;
 - (NSUInteger)weekday;

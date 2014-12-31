@@ -331,4 +331,17 @@ static NSDateFormatter *_displayFormatter = nil;
 	return [NSDate timestampFormatString];
 }
 
+- (NSInteger)dayTime
+{
+    [[self class] initializeStatics];
+    NSString *dbDateString = [self string];
+    NSRange yearRange = NSMakeRange(0, 4);
+    NSRange monthRange = NSMakeRange(5, 2);
+    NSRange dayRange = NSMakeRange(8, 2);
+    NSInteger year = [[dbDateString substringWithRange:yearRange] integerValue];
+    NSInteger month = [[dbDateString substringWithRange:monthRange] integerValue];
+    NSInteger day = [[dbDateString substringWithRange:dayRange] integerValue];
+    NSInteger time = year *10000 + month*100 + day;
+    return time;
+}
 @end
