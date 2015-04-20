@@ -146,7 +146,7 @@ static NSDateFormatter *_displayFormatter = nil;
 - (NSUInteger)weekNumber {
     NSCalendar *calendar = [[self class] sharedCalendar];
     NSDateComponents *dateComponents = [calendar components:(NSCalendarUnitWeekOfYear) fromDate:self];
-    return [dateComponents weekday];
+    return [dateComponents weekOfYear];
 }
 
 + (NSDate *)dateFromString:(NSString *)string {
