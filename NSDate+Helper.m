@@ -133,6 +133,22 @@ static NSDateFormatter *_displayFormatter = nil;
     NSDateComponents *weekdayComponents = [calendar components:(NSYearCalendarUnit) fromDate:self];
 	return [weekdayComponents year];
 }
+- (NSUInteger)month {
+    NSCalendar *calendar = [[self class] sharedCalendar];
+    NSDateComponents *weekdayComponents = [calendar components:(NSMonthCalendarUnit) fromDate:self];
+	return [weekdayComponents month];
+}
+
+- (NSUInteger)day {
+    NSCalendar *calendar = [[self class] sharedCalendar];
+    NSDateComponents *weekdayComponents = [calendar components:(NSDayCalendarUnit) fromDate:self];
+	return [weekdayComponents day];
+}
+- (NSUInteger)second {
+    NSCalendar *calendar = [[self class] sharedCalendar];
+    NSDateComponents *weekdayComponents = [calendar components:(NSSecondCalendarUnit) fromDate:self];
+	return [weekdayComponents second];
+}
 
 - (long int)utcTimeStamp{
     return lround(floor([self timeIntervalSince1970]));
