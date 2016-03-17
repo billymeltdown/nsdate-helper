@@ -251,6 +251,14 @@ static NSDateFormatter *_displayFormatter = nil;
 	return timestamp_str;
 }
 
+- (NSString *)stringWithFormatISO8601; {
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    NSLocale *enUSPOSIXLocale = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
+    [dateFormatter setLocale:enUSPOSIXLocale];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZZZZZ"];
+    return [dateFormatter stringFromDate:self];
+}
+
 - (NSString *)string {
 	return [self stringWithFormat:[NSDate dbFormatString]];
 }
