@@ -256,7 +256,11 @@ static NSDateFormatter *_displayFormatter = nil;
     NSLocale *enUSPOSIXLocale = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
     [dateFormatter setLocale:enUSPOSIXLocale];
     [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZZZZZ"];
-    return [dateFormatter stringFromDate:self];
+    NSString *outputString = [dateFormatter stringFromDate:self];
+#if !__has_feature(objc_arc)
+    [dateFormatter release];
+#endif
+    return outputString;
 }
 
 - (NSString *)string {
