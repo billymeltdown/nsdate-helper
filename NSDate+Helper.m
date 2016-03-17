@@ -135,18 +135,18 @@ static NSDateFormatter *_displayFormatter = nil;
 }
 - (NSUInteger)month {
     NSCalendar *calendar = [[self class] sharedCalendar];
-    NSDateComponents *weekdayComponents = [calendar components:(NSMonthCalendarUnit) fromDate:self];
+    NSDateComponents *weekdayComponents = [calendar components:(NSCalendarUnitMonth) fromDate:self];
 	return [weekdayComponents month];
 }
 
 - (NSUInteger)day {
     NSCalendar *calendar = [[self class] sharedCalendar];
-    NSDateComponents *weekdayComponents = [calendar components:(NSDayCalendarUnit) fromDate:self];
+    NSDateComponents *weekdayComponents = [calendar components:(NSCalendarUnitDay) fromDate:self];
 	return [weekdayComponents day];
 }
 - (NSUInteger)second {
     NSCalendar *calendar = [[self class] sharedCalendar];
-    NSDateComponents *weekdayComponents = [calendar components:(NSSecondCalendarUnit) fromDate:self];
+    NSDateComponents *weekdayComponents = [calendar components:(NSCalendarUnitSecond) fromDate:self];
 	return [weekdayComponents second];
 }
 
