@@ -41,6 +41,7 @@ static NSString *kNSDateHelperFormatTimeWithPrefix      = @"'at' h:mm a";
 static NSString *kNSDateHelperFormatSQLDate             = @"yyyy-MM-dd";
 static NSString *kNSDateHelperFormatSQLTime             = @"HH:mm:ss";
 static NSString *kNSDateHelperFormatSQLDateWithTime     = @"yyyy-MM-dd HH:mm:ss";
+static NSString *kNSDateHelperLocaleIdentifierEnUSPOSIX = @"en_US_POSIX";
 
 @implementation NSDate (Helper)
 
@@ -280,7 +281,17 @@ static NSDateFormatter *_displayFormatter = nil;
 }
 
 - (NSString *)string {
-	return [self stringWithFormat:[NSDate dbFormatString]];
+	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+	NSString *localeIdentifier = [NSDate timestampLocaleIdentifier];
+	NSLocale *locale = [NSLocale localeWithLocaleIdentifier:localeIdentifier];
+	[dateFormatter setLocale:locale];
+	NSString *format = [NSDate timestampFormatString];
+	[dateFormatter setDateFormat:format];
+	NSString *string = [dateFormatter stringFromDate:self];
+#if !__has_feature(objc_arc)
+	[dateFormatter release];
+#endif
+	return string;
 }
 
 - (NSString *)stringWithDateStyle:(NSDateFormatterStyle)dateStyle timeStyle:(NSDateFormatterStyle)timeStyle {
@@ -352,6 +363,10 @@ static NSDateFormatter *_displayFormatter = nil;
 
 + (NSString *)timestampFormatString {
 	return kNSDateHelperFormatSQLDateWithTime;
+}
+
++ (NSString *)timestampLocaleIdentifier {
+	return kNSDateHelperLocaleIdentifierEnUSPOSIX;
 }
 
 // preserving for compatibility
